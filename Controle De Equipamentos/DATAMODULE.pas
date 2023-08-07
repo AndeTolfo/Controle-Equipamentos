@@ -70,6 +70,7 @@ var
   LServidor : string;
   LPorta : integer;
   LCaminho : string;
+  teste : string;
 begin
 
   try
