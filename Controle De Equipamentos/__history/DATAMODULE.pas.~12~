@@ -1,0 +1,101 @@
+unit DATAMODULE;
+
+interface
+
+uses
+  System.SysUtils, System.Classes, FireDAC.Stan.Intf, FireDAC.Stan.Option,
+  FireDAC.Stan.Error, FireDAC.UI.Intf, FireDAC.Phys.Intf, FireDAC.Stan.Def,
+  FireDAC.Stan.Pool, FireDAC.Stan.Async, FireDAC.Phys, FireDAC.Phys.FB,
+  FireDAC.Phys.FBDef, FireDAC.VCLUI.Wait, Data.DB, FireDAC.Comp.Client,
+  FireDAC.Stan.Param, FireDAC.DatS, FireDAC.DApt.Intf,IniFiles, FireDAC.DApt,
+  FireDAC.Comp.DataSet;
+
+type
+  Tdm = class(TDataModule)
+    conexao: TFDConnection;
+    WriteCompras: TFDQuery;
+    ReadCompras: TFDQuery;
+    WriteEquipamentos: TFDQuery;
+    ReadEquipamentos: TFDQuery;
+    ReadRelCompras: TFDQuery;
+    ReadRelComprasCOD_COMPRA: TIntegerField;
+    ReadRelComprasDATA_COMPRA: TDateField;
+    ReadRelComprasNOME_ITEM: TStringField;
+    ReadRelComprasLOJA_COMPRA: TStringField;
+    ReadRelComprasN_PEDIDO: TStringField;
+    ReadRelComprasNOME_COMPRADOR: TStringField;
+    ReadRelComprasVALOR_ITEM: TFMTBCDField;
+    ReadRelComprasORIGEM_COMPRA: TStringField;
+    ReadRelComprasQTD_COMPRADA: TFMTBCDField;
+    ReadRelComprasTOTAL: TFMTBCDField;
+    ReadRelEquipamentos: TFDQuery;
+    ReadRelEquipamentosCOD_EQP: TIntegerField;
+    ReadRelEquipamentosDATA_CADASTRO: TDateField;
+    ReadRelEquipamentosDATA_ATUALIZACAO: TSQLTimeStampField;
+    ReadRelEquipamentosNOME_MAQUINA: TStringField;
+    ReadRelEquipamentosIP: TStringField;
+    ReadRelEquipamentosPROCESSADOR: TStringField;
+    ReadRelEquipamentosRAM: TStringField;
+    ReadRelEquipamentosPLACA_MAE: TStringField;
+    ReadRelEquipamentosHD_SSD: TStringField;
+    ReadRelEquipamentosWINDOWS: TStringField;
+    ReadRelEquipamentosLICENSA: TStringField;
+    ReadRelEquipamentosSETOR: TStringField;
+    WriteFuncionarios: TFDQuery;
+    ReadFuncionarios: TFDQuery;
+    ReadRelFuncionarios: TFDQuery;
+    procedure DataModuleCreate(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  dm: Tdm;
+
+implementation
+
+{%CLASSGROUP 'Vcl.Controls.TControl'}
+
+{$R *.dfm}
+
+procedure Tdm.DataModuleCreate(Sender: TObject);
+var
+  LIniFile : TIniFile;
+  LDataBase : string;
+  LUser_Name : string;
+  LPassword : string;
+  LServidor : string;
+  LPorta : integer;
+  LCaminho : string;
+begin
+
+  try
+    Conexao.Connected := False;
+
+    LCaminho := ExtractFileDir(ParamStr(0))+ '/Config.ini';
+
+    LIniFile := TIniFile.Create(LCaminho);
+
+    LDataBase := LIniFile.ReadString('Conexao','Database', LDataBase);
+    LServidor := LIniFile.ReadString('Conexao','Servidor', LServidor);
+    LPorta := LIniFile.ReadInteger('Conexao','Porta', LPorta);
+
+    LUser_Name := 'SUPS';
+    LPassword := 'maps3880';
+
+    Conexao.Params.Values['Database'] := LDataBase;
+    Conexao.Params.Values['User_Name'] := LUser_Name;
+    Conexao.Params.Values['Password'] := LPassword;
+    Conexao.Params.Values['Server'] := LServidor;
+    Conexao.Params.Values['Porta'] := LPorta.ToString;
+
+
+  finally
+    FreeAndNil(LIniFile);
+  end;
+
+end;
+
+end.

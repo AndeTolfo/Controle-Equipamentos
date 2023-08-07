@@ -1,0 +1,43 @@
+object dm: Tdm
+  OldCreateOrder = False
+  OnCreate = DataModuleCreate
+  Height = 500
+  Width = 724
+  object conexao: TFDConnection
+    Params.Strings = (
+      
+        'Database=C:\Users\ander\Documents\Embarcadero\Studio\Projects\PB' +
+        'NEW\Controle De Equipamentos\Database\DATABASE.FDB'
+      'User_Name=SUPS'
+      'Password=maps3880'
+      'Server=127.0.0.1'
+      'Port=3051'
+      'DriverID=FB')
+    Connected = True
+    LoginPrompt = False
+    Left = 72
+    Top = 48
+  end
+  object WriteCompras: TFDQuery
+    Connection = conexao
+    Left = 184
+    Top = 56
+  end
+  object ReadCompras: TFDQuery
+    Connection = conexao
+    Left = 312
+    Top = 56
+  end
+  object WriteEquipamentos: TFDQuery
+    Connection = conexao
+    Left = 184
+    Top = 120
+  end
+  object ReadEquipamentos: TFDQuery
+    Connection = conexao
+    SQL.Strings = (
+      'select * from equipamentos_internos')
+    Left = 312
+    Top = 120
+  end
+end
