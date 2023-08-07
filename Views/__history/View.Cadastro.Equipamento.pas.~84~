@@ -1,0 +1,276 @@
+unit View.Cadastro.Equipamento;
+
+interface
+
+uses
+  Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
+  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.ExtCtrls, Vcl.StdCtrls, Vcl.ComCtrls,
+  Vcl.Buttons, DATAMODULE, Data.DB, View.Pesquisas;
+
+type
+  TfrmCadastroCompras = class(TForm)
+    pnlContainer: TPanel;
+    pnlTopo: TPanel;
+    pnlRodape: TPanel;
+    pnlCentro: TPanel;
+    Label1: TLabel;
+    edtCod: TEdit;
+    Label2: TLabel;
+    Label3: TLabel;
+    edtNome: TEdit;
+    Label4: TLabel;
+    edtLoja: TEdit;
+    Label5: TLabel;
+    edtPedido: TEdit;
+    Label6: TLabel;
+    edtComprador: TEdit;
+    Label7: TLabel;
+    dtCompra: TDateTimePicker;
+    Label8: TLabel;
+    edtValor: TEdit;
+    Label9: TLabel;
+    cbTipoCompra: TComboBox;
+    btnsalvar: TBitBtn;
+    btnNovo: TBitBtn;
+    btnExcluir: TBitBtn;
+    btnSair: TBitBtn;
+    dsWriteCompras: TDataSource;
+    btnPesquisaCompra: TSpeedButton;
+    Label10: TLabel;
+    edtQtd: TEdit;
+    Label11: TLabel;
+    edtTotal: TEdit;
+    procedure btnsalvarClick(Sender: TObject);
+    procedure btnSairClick(Sender: TObject);
+    procedure btnNovoClick(Sender: TObject);
+    procedure btnPesquisaCompraClick(Sender: TObject);
+    procedure edtCodKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
+    procedure btnExcluirClick(Sender: TObject);
+    procedure edtCodKeyPress(Sender: TObject; var Key: Char);
+    procedure FormCreate(Sender: TObject);
+    procedure edtQtdChange(Sender: TObject);
+  private
+    var codigo : integer;
+  public
+    { Public declarations }
+  end;
+
+var
+  frmCadastroCompras: TfrmCadastroCompras;
+
+implementation
+
+{$R *.dfm}
+
+uses Funcoes;
+
+procedure TfrmCadastroCompras.btnExcluirClick(Sender: TObject);
+begin
+  // Verifica se o campo edtCod contém um valor inteiro válido
+  if TryStrToInt(edtCod.Text, codigo) then
+  begin
+    if MessageDlg('Deseja realmente excluir o registro?', mtConfirmation, [mbYes, mbNo], 0) = mrYes then
+    begin
+      // Aqui você deve executar o código para excluir o registro do banco de dados.
+      // Por exemplo, usando o DM.WriteCompras para executar um comando SQL de exclusão.
+      // Substitua 'ColunaCodigo' pelo nome correto da coluna que contém o código na tabela.
+      DM.WriteCompras.SQL.Clear;
+      DM.WriteCompras.SQL.Add('DELETE FROM COMPRAS WHERE COD_COMPRA = :codigo');
+      DM.WriteCompras.ParamByName('codigo').AsInteger := codigo;
+      DM.WriteCompras.ExecSQL;
+
+      ShowMessage('Registro excluído com sucesso!');
+
+      // Limpa os campos do formulário após excluir o registro
+      ClearControls([edtCod, edtNome, edtLoja, edtPedido, edtComprador, edtValor, cbTipoCompra, dtCompra]);
+    end;
+  end
+  else
+  begin
+    ShowMessage('Informe um código válido para excluir o registro.');
+  end;
+end;
+procedure TfrmCadastroCompras.btnNovoClick(Sender: TObject);
+begin
+    ClearControls([edtCod, edtNome, edtLoja, edtPedido, edtComprador, edtValor, cbTipoCompra, dtCompra]);
+end;
+
+procedure TfrmCadastroCompras.btnPesquisaCompraClick(Sender: TObject);
+begin
+    frmPesquisa := TfrmPesquisa.Create(Self);
+    try
+    frmPesquisa.tabela := 'Compras';
+    if frmPesquisa.ShowModal = mrOk then
+    begin
+
+    end;
+    finally
+      frmPesquisa.Free;
+    end;
+
+
+end;
+
+procedure TfrmCadastroCompras.btnSairClick(Sender: TObject);
+begin
+    close;
+end;
+
+procedure TfrmCadastroCompras.btnsalvarClick(Sender: TObject);
+var
+  data_compra: TDate;
+  nome_item, loja_compra, n_pedido, nome_comprador, origem_compra: string;
+  valor: Double;
+begin
+  if cbTipoCompra.ItemIndex = -1 then
+  begin
+    ShowMessage('Selecione uma opção de compra.');
+    Exit;
+  end;
+
+  try
+    case cbTipoCompra.ItemIndex of
+      0: origem_compra := 'P';
+      1: origem_compra := 'I';
+    end;
+
+    data_compra := dtCompra.Date;
+    nome_item := edtNome.Text;
+    loja_compra := edtLoja.Text;
+    n_pedido := edtPedido.Text;
+    nome_comprador := edtComprador.Text;
+    valor := StrToFloat(edtValor.Text);
+
+    // Verifica se o campo edtCod contém um valor inteiro válido
+    if Trim(edtCod.Text) = '' then
+    begin
+      // Inserção de um novo registro
+      DM.WriteCompras.SQL.Clear;
+      DM.WriteCompras.SQL.Add('INSERT INTO COMPRAS(DATA_COMPRA, NOME_ITEM, LOJA_COMPRA, N_PEDIDO, NOME_COMPRADOR, VALOR_ITEM, ORIGEM_COMPRA)');
+      DM.WriteCompras.SQL.Add('VALUES (:pDT, :pNomeItem, :pLoja, :pPedido, :pNomeComprador, :pValor, :pOrigemCompra)');
+    end
+    else
+    begin
+      // Atualização do registro existente
+      DM.WriteCompras.SQL.Clear;
+      DM.WriteCompras.SQL.Add('UPDATE COMPRAS SET DATA_COMPRA = :pDT, NOME_ITEM = :pNomeItem, LOJA_COMPRA = :pLoja, N_PEDIDO = :pPedido,');
+      DM.WriteCompras.SQL.Add('NOME_COMPRADOR = :pNomeComprador, VALOR_ITEM = :pValor, ORIGEM_COMPRA = :pOrigemCompra');
+      DM.WriteCompras.SQL.Add('WHERE COD_COMPRA = :pCodigo');
+      DM.WriteCompras.ParamByName('pCodigo').AsInteger := StrToInt(edtCod.Text);
+    end;
+
+    DM.WriteCompras.ParamByName('pDT').AsDate := data_compra;
+    DM.WriteCompras.ParamByName('pNomeItem').AsString := nome_item;
+    DM.WriteCompras.ParamByName('pLoja').AsString := loja_compra;
+    DM.WriteCompras.ParamByName('pPedido').AsString := n_pedido;
+    DM.WriteCompras.ParamByName('pNomeComprador').AsString := nome_comprador;
+    DM.WriteCompras.ParamByName('pValor').AsFloat := valor;
+    DM.WriteCompras.ParamByName('pOrigemCompra').AsString := origem_compra;
+    DM.WriteCompras.ExecSQL;
+    DM.WriteCompras.Close;
+    if Trim(edtCod.Text) = '' then
+      ShowMessage('Cadastro concluído com sucesso!')
+    else
+      ShowMessage('Cadastro atualizado com sucesso!');
+  except
+    on E: Exception do
+      ShowMessage('Erro ao salvar o registro: ' + E.Message);
+  end;
+
+    ClearControls([edtCod, edtNome, edtLoja, edtPedido, edtComprador, edtValor, cbTipoCompra, dtCompra]);
+end;
+procedure TfrmCadastroCompras.edtCodKeyDown(Sender: TObject; var Key: Word;
+  Shift: TShiftState);
+var
+  codigo: Integer;
+begin
+  // Verifica se a tecla pressionada é a tecla "Enter" (código 13)
+  if Key = 13 then
+  begin
+
+    // Verifica se o texto digitado no edtcod é um valor inteiro válido
+    if TryStrToInt(edtcod.Text, codigo) then
+    begin
+      // Realiza a pesquisa no banco de dados com o código informado
+      DM.ReadCompras.SQL.Clear;
+      DM.ReadCompras.SQL.add ('SELECT * FROM COMPRAS WHERE COD_COMPRA = :Codigo');
+      DM.ReadCompras.ParamByName('Codigo').AsInteger := codigo;
+      DM.ReadCompras.Open;
+
+      // Verifica se foi encontrada alguma compra com o código informado
+      if not DM.ReadCompras.IsEmpty then
+      begin
+        // Preenche os outros campos do formulário com os dados da compra encontrada
+        dtCompra.Date := DM.ReadCompras.FieldByName('DATA_COMPRA').AsDateTime;
+        edtNome.Text := DM.ReadCompras.FieldByName('NOME_ITEM').AsString;
+        edtLoja.Text := DM.ReadCompras.FieldByName('LOJA_COMPRA').AsString;
+        edtPedido.Text := DM.ReadCompras.FieldByName('N_PEDIDO').AsString;
+        edtComprador.Text := DM.ReadCompras.FieldByName('NOME_COMPRADOR').AsString;
+        edtValor.Text := FloatToStr(DM.ReadCompras.FieldByName('VALOR_ITEM').AsFloat);
+
+        // Define o valor do ComboBox cbTipoCompra com base na coluna ORIGEM_COMPRA do banco de dados
+        if DM.ReadCompras.FieldByName('ORIGEM_COMPRA').AsString = 'P' then
+          cbTipoCompra.ItemIndex := 0
+        else if DM.ReadCompras.FieldByName('ORIGEM_COMPRA').AsString = 'I' then
+          cbTipoCompra.ItemIndex := 1;
+      end
+      else
+      begin
+        // Caso não encontre uma compra com o código informado, limpa os campos
+        ClearControls([edtCod, edtNome, edtLoja, edtPedido, edtComprador, edtValor, cbTipoCompra, dtCompra]);
+        ShowMessage('Compra não encontrada!');
+        frmPesquisa := TfrmPesquisa.Create(Self);
+        try
+          frmPesquisa.tabela := 'Compras';
+          frmPesquisa.edtNome.Text := inttostr(codigo);
+          if frmPesquisa.ShowModal = mrOk then
+          begin
+
+          end;
+        finally
+          frmPesquisa.Free;
+        end;
+      end;
+    end
+    else
+    begin
+      // Caso o texto digitado não seja um valor inteiro válido, limpa os campos e exibe uma mensagem de erro
+      ClearControls([edtCod, edtNome, edtLoja, edtPedido, edtComprador, edtValor, cbTipoCompra, dtCompra]);
+      ShowMessage('Digite um código de compra válido!');
+    end;
+  end;
+    dm.ReadCompras.Close;
+end;
+procedure TfrmCadastroCompras.edtCodKeyPress(Sender: TObject; var Key: Char);
+begin
+  // Verifica se a tecla pressionada é a tecla "Enter" (código 13)
+  if Key = #13 then
+  begin
+    // Evita que o som padrão seja reproduzido
+    Key := #0;
+  end;
+end;
+
+procedure TfrmCadastroCompras.edtQtdChange(Sender: TObject);
+ var conta : double;
+begin
+ if (edtValor.Text <> '') and (edtQtd.Text <> '') then
+ begin
+      if (strtofloat(edtValor.Text) > 0) and (StrToFloat(edtQtd.Text) > 0)then
+  begin
+    conta := strtofloat(edtValor.Text) * StrToFloat(edtQtd.Text);
+    edtTotal.Text := FloatToStr(conta);
+  end;
+ end;
+
+
+
+
+end;
+
+procedure TfrmCadastroCompras.FormCreate(Sender: TObject);
+begin
+      dtCompra.Date := now;
+end;
+
+end.
