@@ -14,10 +14,21 @@ type
     pnlTopo: TPanel;
     pnlCentro: TPanel;
     pnlRodape: TPanel;
-    dsListagem: TDataSource;
     dbListagem: TDBGrid;
-    cdsMaquinas: TClientDataSet;
     Button1: TButton;
+    cdsMaquinas: TClientDataSet;
+    dsMaquinas: TDataSource;
+    cdsMaquinascod_maq: TIntegerField;
+    cdsMaquinasNOME_MAQUINA: TStringField;
+    cdsMaquinasIP: TStringField;
+    cdsMaquinasPROCESSADOR: TStringField;
+    cdsMaquinasRAM: TStringField;
+    cdsMaquinasPLACA_MAE: TStringField;
+    cdsMaquinasHD_SSD: TStringField;
+    cdsMaquinasWINDOWS: TStringField;
+    cdsMaquinasLICENSA: TStringField;
+    cdsMaquinasSETOR: TStringField;
+    cdsMaquinasCODFUNCIONARIO: TIntegerField;
 
   private
      // Declarar o TSaveDialog como private para ser acessível apenas internamente
