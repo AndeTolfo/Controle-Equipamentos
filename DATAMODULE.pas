@@ -45,6 +45,8 @@ type
     ReadFuncionarios: TFDQuery;
     ReadRelFuncionarios: TFDQuery;
     WriteHistMaquinas: TFDQuery;
+    ReadFormat: TFDQuery;
+    WriteFormat: TFDQuery;
     procedure DataModuleCreate(Sender: TObject);
   private
     { Private declarations }

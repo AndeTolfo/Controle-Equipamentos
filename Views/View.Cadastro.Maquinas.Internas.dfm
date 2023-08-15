@@ -119,6 +119,8 @@ object frmCadMaquinas: TfrmCadMaquinas
       Height = 352
       Align = alClient
       TabOrder = 2
+      ExplicitLeft = 2
+      ExplicitTop = 44
       object Label2: TLabel
         Left = 42
         Top = 12
@@ -312,7 +314,7 @@ object frmCadMaquinas: TfrmCadMaquinas
       object btnPesquisaFuncionario: TSpeedButton
         Left = 292
         Top = 289
-        Width = 25
+        Width = 27
         Height = 23
         Glyph.Data = {
           36030000424D3603000000000000360000002800000010000000100000000100
@@ -522,11 +524,30 @@ object frmCadMaquinas: TfrmCadMaquinas
         OnKeyDown = edtCodKeyDown
         OnKeyPress = edtCodKeyPress
       end
+      object pnlFormat: TPanel
+        Left = 218
+        Top = 316
+        Width = 101
+        Height = 31
+        BevelKind = bkFlat
+        BevelOuter = bvNone
+        Caption = 'Formata'#231#245'es'
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -11
+        Font.Name = 'Tahoma'
+        Font.Style = [fsBold]
+        ParentBackground = False
+        ParentFont = False
+        TabOrder = 13
+        OnMouseEnter = pnlFormatMouseEnter
+        OnMouseLeave = pnlFormatMouseLeave
+      end
     end
   end
   object dsWriteMaquinas: TDataSource
     DataSet = dm.WriteEquipamentos
     Left = 337
-    Top = 194
+    Top = 162
   end
 end

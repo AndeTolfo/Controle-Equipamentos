@@ -46,6 +46,7 @@ type
     edtCodFunc: TEdit;
     btnPesquisaFuncionario: TSpeedButton;
     edtNomeFunc: TEdit;
+    pnlFormat: TPanel;
     procedure btnSairClick(Sender: TObject);
     procedure btnsalvarClick(Sender: TObject);
     procedure btnNovoClick(Sender: TObject);
@@ -57,10 +58,12 @@ type
     procedure edtCodFuncKeyDown(Sender: TObject; var Key: Word;
       Shift: TShiftState);
     procedure btnPesquisaFuncionarioClick(Sender: TObject);
+    procedure pnlFormatMouseEnter(Sender: TObject);
+    procedure pnlFormatMouseLeave(Sender: TObject);
   private
     codigo : integer;
   public
-    { Public declarations }
+    procedure SetBackgruondBotoes(iPanel: TPanel; iColor: TColor);
   end;
 
 var
@@ -434,9 +437,24 @@ begin
   end;
 end;
 
+procedure TfrmCadMaquinas.SetBackgruondBotoes(iPanel: TPanel; iColor: TColor);
+begin
+  iPanel.Color := iColor;
+end;
+
 procedure TfrmCadMaquinas.FormCreate(Sender: TObject);
 begin
        dtCadastro.Date := now;
+end;
+
+procedure TfrmCadMaquinas.pnlFormatMouseEnter(Sender: TObject);
+begin
+      SetBackgruondBotoes(pnlFormat,clBtnHighlight)
+end;
+
+procedure TfrmCadMaquinas.pnlFormatMouseLeave(Sender: TObject);
+begin
+    SetBackgruondBotoes(TPanel(Sender), clBtnFace);
 end;
 
 end.

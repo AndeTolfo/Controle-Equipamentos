@@ -12,7 +12,8 @@ uses
   View.Listagem.Compras in 'Views\View.Listagem.Compras.pas' {frmListagemCompras},
   frame.Pesquisa2 in 'Views\frame.Pesquisa2.pas' {frmPesquisaEdt: TFrame},
   frame.Buttons in 'Views\frame.Buttons.pas' {frmButtons: TFrame},
-  view.Cadastro.Funcionarios in 'Views\view.Cadastro.Funcionarios.pas' {frmCadFuncionario};
+  view.Cadastro.Funcionarios in 'Views\view.Cadastro.Funcionarios.pas' {frmCadFuncionario},
+  View.Formatacoes in 'Views\View.Formatacoes.pas' {Form1};
 
 {$R *.res}
 
@@ -22,5 +23,6 @@ begin
   Application.CreateForm(TfrmPrincipal, frmPrincipal);
   Application.CreateForm(Tdm, dm);
   Application.CreateForm(TfrmCadFuncionario, frmCadFuncionario);
+  Application.CreateForm(TForm1, Form1);
   Application.Run;
 end.

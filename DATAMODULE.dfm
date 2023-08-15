@@ -180,4 +180,14 @@ object dm: Tdm
     Left = 184
     Top = 256
   end
+  object ReadFormat: TFDQuery
+    Connection = conexao
+    Left = 304
+    Top = 256
+  end
+  object WriteFormat: TFDQuery
+    Connection = conexao
+    Left = 400
+    Top = 256
+  end
 end
