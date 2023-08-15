@@ -102,14 +102,14 @@ end;
 
 procedure TfrmPrincipal.EquipamentosInternos1Click(Sender: TObject);
 begin
-    frmListagem := TfrmListagem.Create(self);
+    frmListagemMaquinas := TfrmListagemMaquinas.Create(self);
     try
-     if frmListagem.ShowModal = mrOk then
+     if frmListagemMaquinas.ShowModal = mrOk then
       begin
 
       end;
     finally
-       frmListagem.Free;
+       frmListagemMaquinas.Free;
     end;
 end;
 

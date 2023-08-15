@@ -70,6 +70,7 @@ begin
     DM.ReadFormat.SQL.Add('SELECT * FROM hist_formatacao H WHERE H.cod_maquina = :pCodMaq');
     DM.ReadFormat.ParamByName('pCodMaq').AsInteger := codMaquina;
     DM.ReadFormat.Open;
+    dtFormat.Date := Date;
 end;
 
 procedure TfrmFormatacoes.pnlConfirmarClick(Sender: TObject);

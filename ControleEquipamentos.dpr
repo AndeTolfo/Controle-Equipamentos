@@ -6,7 +6,7 @@ uses
   View.Cadastro.Equipamento in 'Views\View.Cadastro.Equipamento.pas' {frmCadastroCompras},
   View.Cadastro.Maquinas.Internas in 'Views\View.Cadastro.Maquinas.Internas.pas' {frmCadMaquinas},
   DATAMODULE in 'DATAMODULE.pas' {dm: TDataModule},
-  View.Listagem in 'Views\View.Listagem.pas' {frmListagem},
+  View.Listagem in 'Views\View.Listagem.pas' {frmListagemMaquinas},
   Funcoes in 'Funcoes.pas',
   View.Pesquisas in 'Views\View.Pesquisas.pas' {frmPesquisa},
   View.Listagem.Compras in 'Views\View.Listagem.Compras.pas' {frmListagemCompras},

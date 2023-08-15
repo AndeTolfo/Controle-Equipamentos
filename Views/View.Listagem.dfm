@@ -1,7 +1,7 @@
-object frmListagem: TfrmListagem
+object frmListagemMaquinas: TfrmListagemMaquinas
   Left = 0
   Top = 0
-  Caption = 'frmListagem'
+  Caption = 'frmListagemMaquinas'
   ClientHeight = 491
   ClientWidth = 812
   Color = clBtnFace
@@ -12,8 +12,6 @@ object frmListagem: TfrmListagem
   Font.Style = []
   OldCreateOrder = False
   Position = poScreenCenter
-  OnCreate = FormCreate
-  OnShow = FormShow
   PixelsPerInch = 96
   TextHeight = 13
   object pnlContainer: TPanel
@@ -38,8 +36,6 @@ object frmListagem: TfrmListagem
       Height = 351
       Align = alClient
       TabOrder = 1
-      ExplicitTop = 57
-      ExplicitHeight = 367
       object dbListagem: TDBGrid
         Left = 1
         Top = 1
@@ -73,18 +69,14 @@ object frmListagem: TfrmListagem
     end
   end
   object dsListagem: TDataSource
-    DataSet = cdsDados
+    DataSet = cdsMaquinas
     Left = 665
     Top = 433
   end
-  object cdsDados: TClientDataSet
+  object cdsMaquinas: TClientDataSet
     Aggregates = <>
     Params = <>
     Left = 601
     Top = 432
-    object cdsDadosnome_maquina: TStringField
-      FieldName = 'nome_maquina'
-      Size = 100
-    end
   end
 end
