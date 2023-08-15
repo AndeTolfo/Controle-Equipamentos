@@ -47,6 +47,10 @@ type
     WriteHistMaquinas: TFDQuery;
     ReadFormat: TFDQuery;
     WriteFormat: TFDQuery;
+    ReadFormatCOD_FORMAT: TIntegerField;
+    ReadFormatCOD_MAQUINA: TIntegerField;
+    ReadFormatCOD_FUNCIONARIO: TIntegerField;
+    ReadFormatDT_FORMAT: TSQLTimeStampField;
     procedure DataModuleCreate(Sender: TObject);
   private
     { Private declarations }

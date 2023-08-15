@@ -39,7 +39,7 @@ implementation
 {$R *.dfm}
 
 uses View.Cadastro.Equipamento, View.Cadastro.Maquinas.Internas,
-  View.Listagem.Compras, view.Cadastro.Funcionarios;
+  View.Listagem.Compras, view.Cadastro.Funcionarios, View.Formatacoes;
 
 procedure TfrmPesquisa.btnAtualizarClick(Sender: TObject);
 var
@@ -81,7 +81,7 @@ begin
     DM.ReadCompras.Open;
   end
   /////funcionario
-  else if (tabela = 'Funcionarios') or (tabela = 'FuncionariosRel') then
+  else if (tabela = 'Funcionarios') or (tabela = 'FuncionariosRel') or (tabela = 'FuncionariosRelFormat') then
   begin
     if edtCod.Text <> '' then
     begin
@@ -258,9 +258,21 @@ begin
     frmCadMaquinas.edtCodFunc.Text := dbListagem.DataSource.DataSet.FieldByName('COD_FUNCIONARIO').AsString;
     frmCadMaquinas.edtNomeFunc.Text := dbListagem.DataSource.DataSet.FieldByName('nome_funcionario').AsString;
     end;
+     end
+
+  //funcionario cad format
+   else if tabela = 'FuncionariosRelFormat' then
+    begin
+    // Obtém o código do registro selecionado (você precisa substituir 'ColunaCodigo' pelo nome da coluna que contém o código na tabela)
+    codigofunc := dbListagem.DataSource.DataSet.FieldByName('COD_FUNCIONARIO').AsInteger;
+    if codigofunc >= 0 then
+    begin
+    frmFormatacoes.edtCodFunc.Text := dbListagem.DataSource.DataSet.FieldByName('COD_FUNCIONARIO').AsString;
+    frmFormatacoes.edtNomeFunc.Text := dbListagem.DataSource.DataSet.FieldByName('nome_funcionario').AsString;
+    end;
      end;
+    end;
      Close;
-  end;
 
 end;
 
@@ -326,7 +338,7 @@ begin
     end
 
     //funcionarios
-    else if (tabela = 'Funcionarios') or (tabela = 'FuncionariosRel') then
+    else if (tabela = 'Funcionarios') or (tabela = 'FuncionariosRel') or (tabela = 'FuncionariosRelFormat') then
     begin
     frmPesquisa.Caption := 'Pesquisa Funcionários';
     dbListagem.Columns[0].FieldName := 'cod_funcionario';

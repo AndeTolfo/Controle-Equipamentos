@@ -119,8 +119,6 @@ object frmCadMaquinas: TfrmCadMaquinas
       Height = 352
       Align = alClient
       TabOrder = 2
-      ExplicitLeft = 2
-      ExplicitTop = 44
       object Label2: TLabel
         Left = 42
         Top = 12
@@ -540,6 +538,7 @@ object frmCadMaquinas: TfrmCadMaquinas
         ParentBackground = False
         ParentFont = False
         TabOrder = 13
+        OnClick = pnlFormatClick
         OnMouseEnter = pnlFormatMouseEnter
         OnMouseLeave = pnlFormatMouseLeave
       end

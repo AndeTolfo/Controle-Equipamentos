@@ -182,8 +182,31 @@ object dm: Tdm
   end
   object ReadFormat: TFDQuery
     Connection = conexao
+    SQL.Strings = (
+      'select * FROM HIST_FORMATACAO')
     Left = 304
     Top = 256
+    object ReadFormatCOD_FORMAT: TIntegerField
+      FieldName = 'COD_FORMAT'
+      Origin = 'COD_FORMAT'
+      ProviderFlags = [pfInUpdate, pfInWhere, pfInKey]
+      Required = True
+    end
+    object ReadFormatCOD_MAQUINA: TIntegerField
+      FieldName = 'COD_MAQUINA'
+      Origin = 'COD_MAQUINA'
+      Required = True
+    end
+    object ReadFormatCOD_FUNCIONARIO: TIntegerField
+      FieldName = 'COD_FUNCIONARIO'
+      Origin = 'COD_FUNCIONARIO'
+      Required = True
+    end
+    object ReadFormatDT_FORMAT: TSQLTimeStampField
+      FieldName = 'DT_FORMAT'
+      Origin = 'DT_FORMAT'
+      Required = True
+    end
   end
   object WriteFormat: TFDQuery
     Connection = conexao

@@ -5,7 +5,7 @@ interface
 uses
   Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
   Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.StdCtrls, Vcl.ComCtrls, Vcl.ExtCtrls,
-  Vcl.Buttons, DATAMODULE, Data.DB, View.Pesquisas;
+  Vcl.Buttons, DATAMODULE, Data.DB, View.Pesquisas, View.Formatacoes;
 
 type
   TfrmCadMaquinas = class(TForm)
@@ -60,6 +60,7 @@ type
     procedure btnPesquisaFuncionarioClick(Sender: TObject);
     procedure pnlFormatMouseEnter(Sender: TObject);
     procedure pnlFormatMouseLeave(Sender: TObject);
+    procedure pnlFormatClick(Sender: TObject);
   private
     codigo : integer;
   public
@@ -445,6 +446,28 @@ end;
 procedure TfrmCadMaquinas.FormCreate(Sender: TObject);
 begin
        dtCadastro.Date := now;
+end;
+
+procedure TfrmCadMaquinas.pnlFormatClick(Sender: TObject);
+begin
+  if edtCod.Text <> '' then
+  begin
+      frmFormatacoes := TfrmFormatacoes.Create(Self);
+      frmFormatacoes.codMaquina := strtoint(edtCod.Text);
+  try
+    if frmFormatacoes.ShowModal = mrOk then
+    begin
+
+    end;
+  finally
+    frmFormatacoes.Free;
+    end;
+  end
+  else
+  begin
+    ShowMessage('Primeire Selecione uma máquina');
+  end;
+
 end;
 
 procedure TfrmCadMaquinas.pnlFormatMouseEnter(Sender: TObject);

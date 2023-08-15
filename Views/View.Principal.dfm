@@ -1077,10 +1077,7 @@ object frmPrincipal: TfrmPrincipal
           000049454E44AE426082}
         ShowHint = False
         Stretch = True
-        ExplicitLeft = 248
-        ExplicitTop = 128
-        ExplicitWidth = 105
-        ExplicitHeight = 105
+        ExplicitTop = -4
       end
     end
     object pnlRodape: TPanel

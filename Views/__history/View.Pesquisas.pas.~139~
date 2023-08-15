@@ -1,0 +1,352 @@
+unit View.Pesquisas;
+
+interface
+
+uses
+  Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
+  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.ExtCtrls, Data.DB, Vcl.Grids,
+  Vcl.DBGrids, DATAMODULE, Vcl.StdCtrls;
+
+type
+  TfrmPesquisa = class(TForm)
+    pnlTopo: TPanel;
+    pnlRodape: TPanel;
+    pnlCentro: TPanel;
+    pnlContainer: TPanel;
+    dsPesquisa: TDataSource;
+    dblistagem: TDBGrid;
+    Label1: TLabel;
+    edtNome: TEdit;
+    Label2: TLabel;
+    edtCod: TEdit;
+    btnAtualizar: TButton;
+    procedure btnAtualizarClick(Sender: TObject);
+    procedure dblistagemDblClick(Sender: TObject);
+    procedure FormShow(Sender: TObject);
+    procedure FormClose(Sender: TObject; var Action: TCloseAction);
+  private
+  public
+    tabela : string;
+    codigo : integer;
+    codigofunc : integer;
+  end;
+
+var
+  frmPesquisa: TfrmPesquisa;
+
+implementation
+
+{$R *.dfm}
+
+uses View.Cadastro.Equipamento, View.Cadastro.Maquinas.Internas,
+  View.Listagem.Compras, view.Cadastro.Funcionarios;
+
+procedure TfrmPesquisa.btnAtualizarClick(Sender: TObject);
+var
+  where: string;
+begin
+  where := ''; // Inicializa a variável 'where' com uma string vazia
+
+  if (tabela = 'Compras') or (tabela = 'ComprasRel') then
+  begin
+    if edtCod.Text <> '' then
+    begin
+      if where <> '' then
+      begin
+      where := where + ' AND ';
+      where := where + 'C.cod_compra IN (' + edtCod.Text + ')';
+      end
+      else if where = '' then
+      begin
+      where := where + 'where C.cod_compra IN (' + edtCod.Text + ')';
+      end;
+    end;
+    if edtNome.Text <> '' then
+    begin
+      if where <> '' then
+      begin
+        where := where + ' AND ';
+      where := where + 'UPPER(c.nome_item) LIKE ' + QuotedStr('%' + UpperCase(edtNome.Text) + '%');
+      end
+      else if where = '' then
+      begin
+      where := where + ' WHERE UPPER(c.nome_item) LIKE ' + QuotedStr('%' + UpperCase(edtNome.Text) + '%');
+      end;
+    end;
+
+    DM.ReadCompras.Close;
+    DM.ReadCompras.SQL.Clear;
+    DM.ReadCompras.SQL.Add('SELECT * FROM Compras c ' + where);
+    dsPesquisa.DataSet := dm.ReadCompras;
+    DM.ReadCompras.Open;
+  end
+  /////funcionario
+  else if (tabela = 'Funcionarios') or (tabela = 'FuncionariosRel') then
+  begin
+    if edtCod.Text <> '' then
+    begin
+      if where <> '' then
+      begin
+      where := where + ' AND ';
+      where := where + 'F.cod_funcionario IN (' + edtCod.Text + ')';
+      end
+      else if where = '' then
+      begin
+      where := where + 'where f.cod_funcionario IN (' + edtCod.Text + ')';
+      end;
+    end;
+    if edtNome.Text <> '' then
+    begin
+      if where <> '' then
+      begin
+        where := where + ' AND ';
+      where := where + 'UPPER(f.nome_funcionario) LIKE ' + QuotedStr('%' + UpperCase(edtNome.Text) + '%');
+      end
+      else if where = '' then
+      begin
+      where := where + ' WHERE UPPER(f.nome_funcionario) LIKE ' + QuotedStr('%' + UpperCase(edtNome.Text) + '%');
+      end;
+    end;
+
+    DM.ReadFuncionarios.Close;
+    DM.ReadFuncionarios.SQL.Clear;
+    DM.ReadFuncionarios.SQL.Add('SELECT * from funcionarios f ' + where);
+    dsPesquisa.DataSet := DM.ReadFuncionarios;
+    DM.ReadFuncionarios.Open;
+  end
+
+  ///Equipamentos
+  else if tabela = 'EquipamentosInternos' then
+  begin
+    DM.ReadEquipamentos.Close;
+    DM.ReadEquipamentos.SQL.Clear;
+    DM.ReadEquipamentos.SQL.Add('SELECT * FROM equipamentos_internos');
+    dsPesquisa.DataSet := dm.ReadEquipamentos;
+    DM.ReadEquipamentos.Open;
+  end;
+end;
+
+procedure TfrmPesquisa.dblistagemDblClick(Sender: TObject);
+begin
+    if not dblistagem.SelectedField.IsNull then
+  begin
+    if tabela = 'Compras' then
+    begin
+    // Obtém o código do registro selecionado (você precisa substituir 'ColunaCodigo' pelo nome da coluna que contém o código na tabela)
+    codigo := dbListagem.DataSource.DataSet.FieldByName('cod_compra').AsInteger;
+
+    // Atualiza o registro atual da tabela de compras com os dados do registro selecionado no dbGrid
+    DM.ReadCompras.SQL.Text := 'SELECT * FROM COMPRAS WHERE COD_COMPRA = :Codigo';
+    DM.ReadCompras.ParamByName('Codigo').AsInteger := codigo;
+    DM.ReadCompras.Open;
+
+    // Preenche os campos do formulário "frmcadastro" com os dados do registro selecionado no dbGrid
+    frmCadastroCompras.edtCod.Text := DM.ReadCompras.FieldByName('COD_COMPRA').AsString;
+    frmCadastroCompras.dtCompra.Date := DM.ReadCompras.FieldByName('DATA_COMPRA').AsDateTime;
+    frmCadastroCompras.edtNome.Text := DM.ReadCompras.FieldByName('NOME_ITEM').AsString;
+    frmCadastroCompras.edtLoja.Text := DM.ReadCompras.FieldByName('LOJA_COMPRA').AsString;
+    frmCadastroCompras.edtPedido.Text := DM.ReadCompras.FieldByName('N_PEDIDO').AsString;
+    frmCadastroCompras.edtComprador.Text := DM.ReadCompras.FieldByName('NOME_COMPRADOR').AsString;
+    frmCadastroCompras.edtValor.Text := FloatToStr(DM.ReadCompras.FieldByName('VALOR_ITEM').AsFloat);
+    frmCadastroCompras.edtQtd.Text := FloatToStr(DM.ReadCompras.FieldByName('qtd_comprada').AsFloat);
+    frmCadastroCompras.edtTotal.Text := FloatToStr(DM.ReadCompras.FieldByName('total').AsFloat);
+
+    // Define o valor do ComboBox cbTipoCompra com base na coluna ORIGEM_COMPRA do banco de dados
+    if DM.ReadCompras.FieldByName('ORIGEM_COMPRA').AsString = 'P' then
+      frmCadastroCompras.cbTipoCompra.ItemIndex := 1
+    else if DM.ReadCompras.FieldByName('ORIGEM_COMPRA').AsString = 'I' then
+      frmCadastroCompras.cbTipoCompra.ItemIndex := 0;
+    // Fechar o formulário "frmpesquisa" após selecionar o registro
+    Dm.ReadCompras.Close;
+     end
+
+    else if tabela = 'ComprasRel' then
+    begin
+        codigo := DM.ReadCompras.FieldByName('COD_COMPRA').AsInteger;
+    end
+
+    else if tabela = 'EquipamentosInternos' then
+    begin
+    // Obtém o código do registro selecionado (você precisa substituir 'ColunaCodigo' pelo nome da coluna que contém o código na tabela)
+    codigo := dbListagem.DataSource.DataSet.FieldByName('cod_eqp').AsInteger;
+
+    // Atualiza o registro atual da tabela de compras com os dados do registro selecionado no dbGrid
+    DM.ReadEquipamentos.SQL.Text := 'SELECT * FROM equipamentos_internos WHERE COD_eqp = :Codigo';
+    DM.ReadEquipamentos.ParamByName('Codigo').AsInteger := codigo;
+    DM.ReadEquipamentos.Open;
+
+    // Preenche os campos do formulário "frmcadastro" com os dados do registro selecionado no dbGrid
+    frmCadMaquinas.edtCod.Text := DM.ReadEquipamentos.FieldByName('COD_EQP').AsString;
+    frmCadMaquinas.edtNomeMaq.Text := DM.ReadEquipamentos.FieldByName('nome_maquina').AsString;
+    frmCadMaquinas.dtCadastro.Date := DM.ReadEquipamentos.FieldByName('data_cadastro').AsDateTime;
+    frmCadMaquinas.edtIp.Text := DM.ReadEquipamentos.FieldByName('ip').AsString;
+    frmCadMaquinas.edtProcessador.Text := DM.ReadEquipamentos.FieldByName('processador').AsString;
+    frmCadMaquinas.edtRam.Text := DM.ReadEquipamentos.FieldByName('ram').AsString;
+    frmCadMaquinas.edtPlacaMae.Text := DM.ReadEquipamentos.FieldByName('placa_mae').AsString;
+    frmCadMaquinas.edtArmazenamento.Text := DM.ReadEquipamentos.FieldByName('hd_ssd').AsString;
+    frmCadMaquinas.edtWindows.Text := DM.ReadEquipamentos.FieldByName('windows').AsString;
+    frmCadMaquinas.edtLicensa.Text := DM.ReadEquipamentos.FieldByName('licensa').AsString;
+
+    codigofunc := DM.ReadEquipamentos.FieldByName('cod_funcionario').AsInteger;
+    frmCadMaquinas.edtCodFunc.Text := inttostr(codigofunc);
+    if codigofunc <> null then
+    begin
+       DM.ReadFuncionarios.SQL.Text := 'SELECT * FROM funcionarios WHERE COD_Funcionario = :Codigo';
+       DM.ReadFuncionarios.ParamByName('Codigo').AsInteger := codigofunc;
+       DM.ReadFuncionarios.Open;
+       frmCadMaquinas.edtNomeFunc.Text := DM.ReadFuncionarios.FieldByName('nome_funcionario').AsString;
+       DM.ReadFuncionarios.Close;
+    end;
+    // Define o valor do ComboBox cbSetor com base na coluna Setor do banco de dados
+    if DM.ReadEquipamentos.FieldByName('setor').AsString = 'Comercial' then
+      frmCadMaquinas.cbSetor.ItemIndex := 0
+    else if DM.ReadEquipamentos.FieldByName('setor').AsString = 'Desenvolvimento' then
+      frmCadMaquinas.cbSetor.ItemIndex := 1
+    else if DM.ReadEquipamentos.FieldByName('setor').AsString = 'Financeiro' then
+      frmCadMaquinas.cbSetor.ItemIndex := 2
+    else if DM.ReadEquipamentos.FieldByName('setor').AsString = 'Medicon' then
+      frmCadMaquinas.cbSetor.ItemIndex := 3
+    else if DM.ReadEquipamentos.FieldByName('setor').AsString = 'Siscomp' then
+      frmCadMaquinas.cbSetor.ItemIndex := 4
+    else if DM.ReadEquipamentos.FieldByName('setor').AsString = 'Administração' then
+      frmCadMaquinas.cbSetor.ItemIndex := 5;
+    Dm.ReadEquipamentos.Close;
+
+     end
+    //Funcionários
+    else if tabela = 'Funcionarios' then
+    begin
+    // Obtém o código do registro selecionado (você precisa substituir 'ColunaCodigo' pelo nome da coluna que contém o código na tabela)
+    codigo := dbListagem.DataSource.DataSet.FieldByName('cod_funcionario').AsInteger;
+
+    // Atualiza o registro atual da tabela de compras com os dados do registro selecionado no dbGrid
+    DM.ReadFuncionarios.SQL.Text := 'SELECT * FROM funcionarios WHERE COD_Funcionario = :Codigo';
+    DM.ReadFuncionarios.ParamByName('Codigo').AsInteger := codigo;
+    DM.ReadFuncionarios.Open;
+
+    // Preenche os campos do formulário "frmcadastro" com os dados do registro selecionado no dbGrid
+    frmCadFuncionario.edtCod.Text := DM.ReadFuncionarios.FieldByName('COD_Funcionario').AsString;
+    frmCadFuncionario.edtNome.Text := DM.ReadFuncionarios.FieldByName('nome_funcionario').AsString;
+    frmCadFuncionario.dtCadastro.Date := DM.ReadFuncionarios.FieldByName('data_cadastro').AsDateTime;
+    // Define o valor do ComboBox cbSetor com base na coluna Setor do banco de dados
+    if DM.ReadFuncionarios.FieldByName('setor').AsString = 'Comercial' then
+     frmCadFuncionario.cbSetor.ItemIndex := 0
+    else if DM.ReadFuncionarios.FieldByName('setor').AsString = 'Desenvolvimento' then
+      frmCadFuncionario.cbSetor.ItemIndex := 1
+    else if DM.ReadFuncionarios.FieldByName('setor').AsString = 'Financeiro' then
+      frmCadFuncionario.cbSetor.ItemIndex := 2
+    else if DM.ReadFuncionarios.FieldByName('setor').AsString = 'Medicon' then
+      frmCadFuncionario.cbSetor.ItemIndex := 3
+    else if DM.ReadFuncionarios.FieldByName('setor').AsString = 'Siscomp' then
+      frmCadFuncionario.cbSetor.ItemIndex := 4
+    else if DM.ReadFuncionarios.FieldByName('setor').AsString = 'Administração' then
+      frmCadFuncionario.cbSetor.ItemIndex := 5;
+
+    if DM.ReadFuncionarios.FieldByName('status').AsString = 'Ativo' then
+      frmCadFuncionario.cbContrato.ItemIndex := 0
+    else if DM.ReadFuncionarios.FieldByName('setor').AsString = 'Inativo' then
+      frmCadFuncionario.cbContrato.ItemIndex := 1;
+    Dm.ReadFuncionarios.Close;
+     end
+   // funcionario cad maquinas
+  else if tabela = 'FuncionariosRel' then
+    begin
+    // Obtém o código do registro selecionado (você precisa substituir 'ColunaCodigo' pelo nome da coluna que contém o código na tabela)
+    codigofunc := dbListagem.DataSource.DataSet.FieldByName('COD_FUNCIONARIO').AsInteger;
+    if codigofunc >= 0 then
+    begin
+    frmCadMaquinas.edtCodFunc.Text := dbListagem.DataSource.DataSet.FieldByName('COD_FUNCIONARIO').AsString;
+    frmCadMaquinas.edtNomeFunc.Text := dbListagem.DataSource.DataSet.FieldByName('nome_funcionario').AsString;
+    end;
+     end;
+     Close;
+  end;
+
+end;
+
+procedure TfrmPesquisa.FormClose(Sender: TObject; var Action: TCloseAction);
+begin
+    dbListagem.Columns[5].Visible := true;
+    dbListagem.Columns[6].Visible := true;
+    dbListagem.Columns[7].Visible := true;
+    dbListagem.Columns[8].Visible := true;
+    dbListagem.Columns[9].Visible := true;
+end;
+
+procedure TfrmPesquisa.FormShow(Sender: TObject);
+begin
+    if (tabela = 'Compras') or (tabela = 'ComprasRel') then
+    begin
+    frmPesquisa.Caption := 'Pesquisa Compras';
+    dbListagem.Columns[0].FieldName := 'cod_compra';
+    dbListagem.Columns[0].Title.Caption := 'Cod';
+    dbListagem.Columns[1].FieldName := 'data_compra';
+    dbListagem.Columns[1].Title.Caption := 'Data';
+    dbListagem.Columns[2].FieldName := 'nome_item';
+    dbListagem.Columns[2].Title.Caption := 'Nome';
+    dbListagem.Columns[3].FieldName := 'loja_compra';
+    dbListagem.Columns[3].Title.Caption := 'Loja';
+    dbListagem.Columns[4].FieldName := 'n_pedido';
+    dbListagem.Columns[4].Title.Caption := 'Pedido';
+    dbListagem.Columns[5].FieldName := 'nome_comprador';
+    dbListagem.Columns[5].Title.Caption := 'Comprador';
+    dbListagem.Columns[6].FieldName := 'valor_item';
+    dbListagem.Columns[6].Title.Caption := 'R$Unit';
+    dbListagem.Columns[7].FieldName := 'Origem_Compra';
+    dbListagem.Columns[7].Title.Caption := 'Origem';
+    dbListagem.Columns[8].FieldName := 'QTD_COMPRADA';
+    dbListagem.Columns[8].Title.Caption := 'QTD';
+    dbListagem.Columns[9].FieldName := 'Total';
+    dbListagem.Columns[9].Title.Caption := 'R$Total';
+    end
+    else if tabela = 'EquipamentosInternos' then
+    begin
+    frmPesquisa.Caption := 'Pesquisa Máquinas';
+    dbListagem.Columns[0].FieldName := 'cod_eqp';
+    dbListagem.Columns[0].Title.Caption := 'Cod';
+    dbListagem.Columns[1].FieldName := 'data_cadastro';
+    dbListagem.Columns[1].Title.Caption := 'DataCad';
+    dbListagem.Columns[2].FieldName := 'Nome_maquina';
+    dbListagem.Columns[2].Title.Caption := 'Nome';
+    dbListagem.Columns[2].Width := 100;
+    dbListagem.Columns[3].FieldName := 'IP';
+    dbListagem.Columns[3].Title.Caption := 'IP';
+    dbListagem.Columns[4].FieldName := 'processador';
+    dbListagem.Columns[4].Title.Caption := 'Processador';
+    dbListagem.Columns[5].FieldName := 'ram';
+    dbListagem.Columns[5].Title.Caption := 'Ram';
+    dbListagem.Columns[6].FieldName := 'Placa_Mae';
+    dbListagem.Columns[6].Title.Caption := 'PlacaMae';
+    dbListagem.Columns[7].FieldName := 'Data_atualizacao';
+    dbListagem.Columns[7].Title.Caption := 'DatAtt';
+    dbListagem.Columns[8].FieldName := 'HD_SSD';
+    dbListagem.Columns[8].Title.Caption := 'Armazenamento';
+    dbListagem.Columns[9].FieldName := 'Windows';
+    dbListagem.Columns[9].Title.Caption := 'Windows';
+    end
+
+    //funcionarios
+    else if (tabela = 'Funcionarios') or (tabela = 'FuncionariosRel') then
+    begin
+    frmPesquisa.Caption := 'Pesquisa Funcionários';
+    dbListagem.Columns[0].FieldName := 'cod_funcionario';
+    dbListagem.Columns[0].Title.Caption := 'Cod';
+    dbListagem.Columns[1].FieldName := 'data_cadastro';
+    dbListagem.Columns[1].Title.Caption := 'DataCad';
+    dbListagem.Columns[2].FieldName := 'Nome_Funcionario';
+    dbListagem.Columns[2].Title.Caption := 'Nome';
+    dbListagem.Columns[2].Width := 150;
+    dbListagem.Columns[3].FieldName := 'Setor';
+    dbListagem.Columns[3].Title.Caption := 'Setor';
+    dbListagem.Columns[3].Width := 80;
+    dbListagem.Columns[4].FieldName := 'Status';
+    dbListagem.Columns[4].Title.Caption := 'Status';
+    dbListagem.Columns[5].Visible := false;
+    dbListagem.Columns[6].Visible := false;
+    dbListagem.Columns[7].Visible := false;
+    dbListagem.Columns[8].Visible := false;
+    dbListagem.Columns[9].Visible := false;
+    end;
+end;
+
+end.
