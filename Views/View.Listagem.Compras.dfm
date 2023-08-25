@@ -64,6 +64,7 @@ object frmListagemCompras: TfrmListagemCompras
       inherited btnSair: TButton
         Left = 439
         Top = 7
+        OnClick = frmButtons1btnSairClick
         ExplicitLeft = 439
         ExplicitTop = 7
       end

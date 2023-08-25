@@ -29,18 +29,6 @@ type
     ReadRelComprasQTD_COMPRADA: TFMTBCDField;
     ReadRelComprasTOTAL: TFMTBCDField;
     ReadRelEquipamentos: TFDQuery;
-    ReadRelEquipamentosCOD_EQP: TIntegerField;
-    ReadRelEquipamentosDATA_CADASTRO: TDateField;
-    ReadRelEquipamentosDATA_ATUALIZACAO: TSQLTimeStampField;
-    ReadRelEquipamentosNOME_MAQUINA: TStringField;
-    ReadRelEquipamentosIP: TStringField;
-    ReadRelEquipamentosPROCESSADOR: TStringField;
-    ReadRelEquipamentosRAM: TStringField;
-    ReadRelEquipamentosPLACA_MAE: TStringField;
-    ReadRelEquipamentosHD_SSD: TStringField;
-    ReadRelEquipamentosWINDOWS: TStringField;
-    ReadRelEquipamentosLICENSA: TStringField;
-    ReadRelEquipamentosSETOR: TStringField;
     WriteFuncionarios: TFDQuery;
     ReadFuncionarios: TFDQuery;
     ReadRelFuncionarios: TFDQuery;

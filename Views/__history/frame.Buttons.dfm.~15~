@@ -1,0 +1,63 @@
+object frmButtons: TfrmButtons
+  Left = 0
+  Top = 0
+  Width = 690
+  Height = 73
+  TabOrder = 0
+  object btnRel: TButton
+    Left = 120
+    Top = 16
+    Width = 75
+    Height = 41
+    Caption = 'Relat'#243'rios'
+    Font.Charset = DEFAULT_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -11
+    Font.Name = 'Tahoma'
+    Font.Style = [fsBold]
+    ParentFont = False
+    TabOrder = 0
+  end
+  object btnAtualizar: TButton
+    Left = 215
+    Top = 16
+    Width = 75
+    Height = 41
+    Caption = 'Atualizar'
+    Font.Charset = DEFAULT_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -11
+    Font.Name = 'Tahoma'
+    Font.Style = [fsBold]
+    ParentFont = False
+    TabOrder = 1
+  end
+  object btnEditar: TButton
+    Left = 311
+    Top = 16
+    Width = 75
+    Height = 41
+    Caption = 'Editar'
+    Font.Charset = DEFAULT_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -11
+    Font.Name = 'Tahoma'
+    Font.Style = [fsBold]
+    ParentFont = False
+    TabOrder = 2
+  end
+  object btnSair: TButton
+    Left = 407
+    Top = 16
+    Width = 75
+    Height = 41
+    Caption = 'Sair'
+    Font.Charset = DEFAULT_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -11
+    Font.Name = 'Tahoma'
+    Font.Style = [fsBold]
+    ParentFont = False
+    TabOrder = 3
+  end
+end

@@ -12,6 +12,7 @@ object frmListagemMaquinas: TfrmListagemMaquinas
   Font.Style = []
   OldCreateOrder = False
   Position = poScreenCenter
+  WindowState = wsMaximized
   PixelsPerInch = 96
   TextHeight = 13
   object pnlContainer: TPanel
@@ -28,19 +29,35 @@ object frmListagemMaquinas: TfrmListagemMaquinas
       Height = 72
       Align = alTop
       TabOrder = 0
+      ExplicitLeft = 17
+      ExplicitTop = -4
+      inline frmPesquisaEdt1: TfrmPesquisaEdt
+        Left = 1
+        Top = 5
+        Width = 408
+        Height = 62
+        TabOrder = 0
+        ExplicitLeft = 1
+        ExplicitTop = 5
+        inherited btnPesquisaEv: TSpeedButton
+          OnClick = frmPesquisaEdt1btnPesquisaEvClick
+        end
+      end
     end
     object pnlCentro: TPanel
       Left = 1
       Top = 73
       Width = 810
-      Height = 351
+      Height = 349
       Align = alClient
       TabOrder = 1
+      ExplicitTop = 34
+      ExplicitHeight = 351
       object dbListagem: TDBGrid
         Left = 1
         Top = 1
         Width = 808
-        Height = 349
+        Height = 347
         Align = alClient
         DataSource = dsMaquinas
         TabOrder = 0
@@ -53,44 +70,65 @@ object frmListagemMaquinas: TfrmListagemMaquinas
     end
     object pnlRodape: TPanel
       Left = 1
-      Top = 424
+      Top = 422
       Width = 810
-      Height = 66
+      Height = 68
       Align = alBottom
       TabOrder = 2
-      object Button1: TButton
-        Left = 176
-        Top = 8
-        Width = 75
-        Height = 25
-        Caption = 'Button1'
+      inline frmButtons1: TfrmButtons
+        Left = 90
+        Top = -3
+        Width = 690
+        Height = 63
         TabOrder = 0
+        ExplicitLeft = 90
+        ExplicitTop = -3
+        ExplicitHeight = 63
+        inherited btnAtualizar: TButton
+          OnClick = frmButtons1btnAtualizarClick
+        end
+        inherited btnSair: TButton
+          OnClick = frmButtons1btnSairClick
+        end
       end
     end
   end
+  object dsMaquinas: TDataSource
+    DataSet = cdsMaquinas
+    Left = 665
+    Top = 432
+  end
   object cdsMaquinas: TClientDataSet
     PersistDataPacket.Data = {
-      3B0100009619E0BD01000000180000000B0000000000030000003B0106436F64
-      4D617104000100000000000C4E4F4D455F4D415155494E410100490000000100
-      0557494454480200020014000249500100490000000100055749445448020002
-      0014000B50524F4345535341444F520100490000000100055749445448020002
-      0014000352414D010049000000010005574944544802000200140009504C4143
-      415F4D414501004900000001000557494454480200020014000648445F535344
-      01004900000001000557494454480200020014000757494E444F575301004900
-      00000100055749445448020002001400074C4943454E53410100490000000100
-      055749445448020002001400055345544F520100490000000100055749445448
-      0200020014000E434F4446554E43494F4E4152494F04000100000000000000}
+      620100009619E0BD01000000180000000C000000000003000000620106436F64
+      4D61710100490000000100055749445448020002000F00074D617175696E6101
+      0049000000010005574944544802000200C8000B46756E63696F6E6172696F01
+      0049000000010005574944544802000200C80002495001004900000001000557
+      494454480200020014000B50726F6365737361646F7201004900000001000557
+      494454480200020064000352616D010049000000010005574944544802000200
+      320009506C6163615F4D61650100490000000100055749445448020002006400
+      0648445F53534401004900000001000557494454480200020064000757696E64
+      6F77730100490000000100055749445448020002003200074C6963656E736101
+      00490000000100055749445448020002006400055365746F7201004900000001
+      000557494454480200020014000E436F6446756E63696F6E6172696F04000100
+      000000000000}
     Active = True
     Aggregates = <>
     FieldDefs = <
       item
         Name = 'CodMaq'
-        DataType = ftInteger
+        DataType = ftString
+        Size = 15
       end
       item
-        Name = 'NOME_MAQUINA'
+        Name = 'Maquina'
         DataType = ftString
-        Size = 20
+        Size = 200
+      end
+      item
+        Name = 'Funcionario'
+        DataType = ftString
+        Size = 200
       end
       item
         Name = 'IP'
@@ -98,86 +136,105 @@ object frmListagemMaquinas: TfrmListagemMaquinas
         Size = 20
       end
       item
-        Name = 'PROCESSADOR'
+        Name = 'Processador'
         DataType = ftString
-        Size = 20
+        Size = 100
       end
       item
-        Name = 'RAM'
+        Name = 'Ram'
         DataType = ftString
-        Size = 20
+        Size = 50
       end
       item
-        Name = 'PLACA_MAE'
+        Name = 'Placa_Mae'
         DataType = ftString
-        Size = 20
+        Size = 100
       end
       item
         Name = 'HD_SSD'
         DataType = ftString
-        Size = 20
+        Size = 100
       end
       item
-        Name = 'WINDOWS'
+        Name = 'Windows'
+        DataType = ftString
+        Size = 50
+      end
+      item
+        Name = 'Licensa'
+        DataType = ftString
+        Size = 100
+      end
+      item
+        Name = 'Setor'
         DataType = ftString
         Size = 20
       end
       item
-        Name = 'LICENSA'
-        DataType = ftString
-        Size = 20
-      end
-      item
-        Name = 'SETOR'
-        DataType = ftString
-        Size = 20
-      end
-      item
-        Name = 'CODFUNCIONARIO'
+        Name = 'CodFuncionario'
         DataType = ftInteger
       end>
     IndexDefs = <>
     Params = <>
     StoreDefs = True
-    Left = 601
+    Left = 593
     Top = 432
-    object cdsMaquinascod_maq: TIntegerField
+    object cdsMaquinasCodMaq: TStringField
+      DisplayWidth = 8
       FieldName = 'CodMaq'
+      Size = 15
     end
-    object cdsMaquinasNOME_MAQUINA: TStringField
-      FieldName = 'NOME_MAQUINA'
+    object cdsMaquinasMaquina: TStringField
+      DisplayWidth = 15
+      FieldName = 'Maquina'
+      Size = 200
+    end
+    object cdsMaquinasFuncionario: TStringField
+      DisplayWidth = 19
+      FieldName = 'Funcionario'
+      Size = 200
     end
     object cdsMaquinasIP: TStringField
+      DisplayWidth = 13
       FieldName = 'IP'
     end
-    object cdsMaquinasPROCESSADOR: TStringField
-      FieldName = 'PROCESSADOR'
+    object cdsMaquinasProcessador: TStringField
+      DisplayWidth = 34
+      FieldName = 'Processador'
+      Size = 100
     end
-    object cdsMaquinasRAM: TStringField
-      FieldName = 'RAM'
+    object cdsMaquinasRam: TStringField
+      DisplayWidth = 26
+      FieldName = 'Ram'
+      Size = 50
     end
-    object cdsMaquinasPLACA_MAE: TStringField
-      FieldName = 'PLACA_MAE'
+    object cdsMaquinasPlaca_Mae: TStringField
+      DisplayWidth = 25
+      FieldName = 'Placa_Mae'
+      Size = 100
     end
     object cdsMaquinasHD_SSD: TStringField
+      DisplayWidth = 20
       FieldName = 'HD_SSD'
+      Size = 100
     end
-    object cdsMaquinasWINDOWS: TStringField
-      FieldName = 'WINDOWS'
+    object cdsMaquinasWindows: TStringField
+      DisplayWidth = 27
+      FieldName = 'Windows'
+      Size = 50
     end
-    object cdsMaquinasLICENSA: TStringField
-      FieldName = 'LICENSA'
+    object cdsMaquinasLicensa: TStringField
+      DisplayWidth = 34
+      FieldName = 'Licensa'
+      Size = 100
     end
-    object cdsMaquinasSETOR: TStringField
-      FieldName = 'SETOR'
+    object cdsMaquinasSetor: TStringField
+      DisplayWidth = 15
+      FieldName = 'Setor'
     end
-    object cdsMaquinasCODFUNCIONARIO: TIntegerField
-      FieldName = 'CODFUNCIONARIO'
+    object cdsMaquinasCodFuncionario: TIntegerField
+      DisplayWidth = 12
+      FieldName = 'CodFuncionario'
     end
-  end
-  object dsMaquinas: TDataSource
-    DataSet = cdsMaquinas
-    Left = 665
-    Top = 432
   end
 end

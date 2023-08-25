@@ -101,64 +101,6 @@ object dm: Tdm
       '')
     Left = 400
     Top = 120
-    object ReadRelEquipamentosCOD_EQP: TIntegerField
-      FieldName = 'COD_EQP'
-      Origin = 'COD_EQP'
-      ProviderFlags = [pfInUpdate, pfInWhere, pfInKey]
-      Required = True
-    end
-    object ReadRelEquipamentosDATA_CADASTRO: TDateField
-      FieldName = 'DATA_CADASTRO'
-      Origin = 'DATA_CADASTRO'
-    end
-    object ReadRelEquipamentosDATA_ATUALIZACAO: TSQLTimeStampField
-      FieldName = 'DATA_ATUALIZACAO'
-      Origin = 'DATA_ATUALIZACAO'
-    end
-    object ReadRelEquipamentosNOME_MAQUINA: TStringField
-      FieldName = 'NOME_MAQUINA'
-      Origin = 'NOME_MAQUINA'
-      Size = 200
-    end
-    object ReadRelEquipamentosIP: TStringField
-      FieldName = 'IP'
-      Origin = 'IP'
-    end
-    object ReadRelEquipamentosPROCESSADOR: TStringField
-      FieldName = 'PROCESSADOR'
-      Origin = 'PROCESSADOR'
-      Size = 100
-    end
-    object ReadRelEquipamentosRAM: TStringField
-      FieldName = 'RAM'
-      Origin = 'RAM'
-      Size = 100
-    end
-    object ReadRelEquipamentosPLACA_MAE: TStringField
-      FieldName = 'PLACA_MAE'
-      Origin = 'PLACA_MAE'
-      Size = 100
-    end
-    object ReadRelEquipamentosHD_SSD: TStringField
-      FieldName = 'HD_SSD'
-      Origin = 'HD_SSD'
-      Size = 100
-    end
-    object ReadRelEquipamentosWINDOWS: TStringField
-      FieldName = 'WINDOWS'
-      Origin = 'WINDOWS'
-      Size = 50
-    end
-    object ReadRelEquipamentosLICENSA: TStringField
-      FieldName = 'LICENSA'
-      Origin = 'LICENSA'
-      Size = 100
-    end
-    object ReadRelEquipamentosSETOR: TStringField
-      FieldName = 'SETOR'
-      Origin = 'SETOR'
-      Size = 50
-    end
   end
   object WriteFuncionarios: TFDQuery
     Connection = conexao

@@ -36,6 +36,7 @@ type
     procedure FormClose(Sender: TObject; var Action: TCloseAction);
     procedure frmPesquisaEdt1edtCodChange(Sender: TObject);
     procedure frmButtons1btnAtualizarClick(Sender: TObject);
+    procedure frmButtons1btnSairClick(Sender: TObject);
 
   private
    procedure CarregarDados;
@@ -173,6 +174,11 @@ begin
   DM.ReadRelCompras.Open;
   CarregarDados; // Carregar os dados filtrados no TClientDataSet
   DM.ReadRelCompras.Close;
+end;
+
+procedure TfrmListagemCompras.frmButtons1btnSairClick(Sender: TObject);
+begin
+    close;
 end;
 
 procedure TfrmListagemCompras.frmPesquisaEdt1btnPesquisaEvClick(
